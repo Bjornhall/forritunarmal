@@ -1,1 +1,2 @@
-# forritunarmal
+# Forritunarmál - Programming Assignment 1
+
