@@ -1,75 +1,66 @@
 import sys
 
-# Prints error message if stack is empty, else pops the stack and returns the result
-def popstack(operator):
-    if not stack:
-        print "Error for operator: " + operator
-        sys.exit()
-    else:
-        return stack.pop()
-
-stack = []
+# A stack reprisenting the language S
+S = []
+# A map variable to store the values of the identifiers
 map = {}
 
-# loops through each line and responds to the operator in it
-for line in sys.stdin:
-    line = line.rstrip()
-    if line[0:4] == "PUSH":
-        var = line[5:]
-        stack.append(var)
-    elif line[0:3] == "ADD":
-        var1 = popstack("ADD")
-        var2 = popstack("ADD")
-        if isinstance(var1, str):
-            if var1.isdigit():
-                var1 = int(var1)
-            else:
-                var1 = int(map[var1])
-        if isinstance(var2, str):
-            if var2.isdigit():
-                var2 = int(var2)
-            else:
-                var2 = int(map[var2])
-        stack.append(var1 + var2)
-    elif line[0:3] == "SUB":
-        var1 = popstack("SUB")
-        var2 = popstack("SUB")
-        if isinstance(var1, str):
-            if var1.isdigit():
-                var1 = int(var1)
-            else:
-                var1 = int(map[var1])
-        if isinstance(var2, str):
-            if var2.isdigit():
-                var2 = int(var2)
-            else:
-                var2 = int(map[var2])
-        stack.append(var2 - var1)
-    elif line[0:4] == "MULT":
-        var1 = popstack("MULT")
-        var2 = popstack("MULT")
-        if isinstance(var1, str):
-            if var1.isdigit():
-                var1 = int(var1)
-            else:
-                var1 = int(map[var1])
-        if isinstance(var2, str):
-            if var2.isdigit():
-                var2 = int(var2)
-            else:
-                var2 = int(map[var2])
-        stack.append(var1 * var2)
-    elif line[0:6] == "ASSIGN":
-        val = popstack("ASSIGN")
-        var = popstack("ASSIGN")
+# A method for handling the exception of the language S being incorrect.
+# If correct it pops the stack and returns the result
+def stackpop(op):
+    if S:
+        return S.pop()
+    else:
+        print "Error for operator: " + op
+        sys.exit()
+
+# A method for parsing the input correctly before performing a operation
+def checkInput(input1, input2):
+    variables = [];
+    if isinstance(input1, str):
+        if input1.isdigit():
+            variables.append(int(input1))
+        else:
+            variables.append(int(map[input1]))
+    if isinstance(input2, str):
+        if input2.isdigit():
+            variables.append(int(input2))
+        else:
+            variables.append(int(map[input2]))
+    return variables
+
+# A loop that goes through each input line and handles the operator in it accordingly
+for inputLine in sys.stdin:
+    inputLine = InputLine.rstrip()
+    if inputLine[0:4] == "PUSH":
+        value = inputLine[5:]
+        S.append(value)
+    elif inputLine[0:3] == "ADD":
+        input1 = stackpop("ADD")
+        input2 = stackpop("ADD")
+        variables = checkInput(input1, input2)
+        S.append(variables.pop() + variables.pop())
+    elif inputLine[0:3] == "SUB":
+        input1 = stackpop("SUB")
+        input2 = stackpop("SUB")
+        variables = checkInput(input1, input2)
+        S.append(variables.pop() - variables.pop())
+    elif inputLine[0:4] == "MULT":
+        input1 = stackpop("MULT")
+        input2 = stackpop("MULT")
+        variables = checkInput(input1, input2)
+        S.append(variables.pop() * variables.pop())
+    elif inputLine[0:6] == "ASSIGN":
+        val = stackpop("ASSIGN")
+        var = stackpop("ASSIGN")
         map[var] = val
-        stack.append(var)
-    elif line[0:5] == "PRINT":
-        var = popstack("PRINT")
+        S.append(var)
+    elif inputLine[0:5] == "PRINT":
+        var = stackpop("PRINT")
         if var.isdigit():
             print var
         else:
             print map[var]
     else:
-            print "Error for operator: " + line
-            sys.exit()
+        print "Error for operator: " + inputLine
+        sys.exit()

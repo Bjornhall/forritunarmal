@@ -10,6 +10,7 @@ class Token:
 
 	# Enum has been added to newer versions of python. Lets try this and if it doesnt work then revert to old syntax
 	TokenCode = Enum('TokenCode', 'ID ASSIGN SEMICOL INT ADD SUB MULT LPAREN RPAREN PRINT END ERROR')
+	
 	def __init__(self, lexeme, tCode):
 		self.lexeme = lexeme
 		self.tCode = tCode
