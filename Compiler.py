@@ -1,6 +1,6 @@
 from Lexer import Lexer
 from Parser import Parser
 
-lexeme = Lexer()
-parser = Parser(lexeme)
+myLexer = Lexer()
+parser = Parser(myLexer)
 parser.parse()
